@@ -70,6 +70,7 @@ function inotify_watch() {
             src="${path}${file}"
             dst="${DEST_BUCKET_URL%/}/${AWS_INSTANCE_ID}/"
             s3upload "${src}" "${dst}" || { log "Failed to upload"; }
+            log "Uploaded from src:${src} to dest:${dst}"
         done
     ) &
     child_subshell="$!"
@@ -101,6 +102,8 @@ trap '_err ${?} ${BASH_COMMAND}' ERR  # Unhandled errors
     log "Destination S3 bucket URL must be specified as first argument";
     exit 2;
 }
+
+log "Destination Bucket URL: ${DEST_BUCKET_URL}"
 
 log "AWS Instance: ${AWS_INSTANCE_ID}"
 
