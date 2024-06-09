@@ -1,6 +1,15 @@
-FROM amazon/aws-cli:latest
+# awscli must run on python 3.7
+FROM python:3.7-alpine
 
-RUN yum -y install bash curl inotify-tools && yum -y clean all  && rm -rf /var/cache
+LABEL org.opencontainers.image.authors="@infra"
+LABEL org.opencontainers.image.channel="#eng-infrastructure"
+LABEL org.opencontainers.image.title="inotify-s3"
+LABEL org.opencontainers.image.type="alpine"
+LABEL org.opencontainers.image.release_method="manual+environments"
+
+RUN apk upgrade --no-cache
+RUN apk add --no-cache ca-certificates groff bash curl inotify-tools
+RUN pip install awscli
 
 SHELL ["/bin/bash", "-eu", "-c"]
 VOLUME /watch
