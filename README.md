@@ -3,7 +3,7 @@ inotify-s3
 
 A bit of bash-fu to upload files from an AWS EC2 instance to S3. The entrypoint script will monitor
 the directory `/watch` inside the container, and upload them when they have finished being written
-to (inotify `close_write` event).
+to (inotify `CLOSE_WRITE` event).
 
 Status
 ------
@@ -35,6 +35,5 @@ Notes
 * This container is designed to handle terminate/interrupt signals, shutdown gracefully and wait
   until any S3 uploads in progress have completed before exiting. Ensure you have appropriate
   timeouts set (e.g. `docker stop -t 120 inotify-s3`, `TimeoutStopSec=120` in systemd).
-* In testing, inotify events did not fire on MacOS, presumably because the MacOS kernel does not
-  implement inotify, and the virtual machine doesn't seem to generate the events either. I've read
-  reports of inotify working previously, hopefully it will be fixed in future.
+* In testing, `CLOSE_WRITE` events did not fire on MacOS, presumably because the Darwin kernel does
+  not implement them.
